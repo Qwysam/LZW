@@ -187,7 +187,10 @@ namespace LZW
                             else
                             {
                                 if (File.Exists(path))
+                                {
                                     input = File.ReadAllText(path);
+                                    break;
+                                }
                             }
                         }
                     }
