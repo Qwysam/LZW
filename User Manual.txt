@@ -1,0 +1,10 @@
+# LZW
+Basic LZW algorithm for text.
+User manual:
+First choose application mode. 
+Then input text. 
+If you are in advanced mode, you can choose whether you want to compress or decompress data. 
+To read from file input 'file' in advanced mode. 
+Input 'change' any time after choosing mode to change it. 
+In educational mode you can only input text from keyboard and observe compression and decompression process. 
+Input 'exit' any time to stop the application. 
