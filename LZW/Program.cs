@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LZW
 {
@@ -111,20 +112,21 @@ namespace LZW
         static void Main(string[] args)
         {
             //explain what it should do
-            Console.WriteLine("This is and educational program to show LZW compression algorithm");
-            Console.WriteLine("It can also be used for text compression in advanced mode");
+            Console.WriteLine("This is and educational program to show LZW compression algorithm.");
+            Console.WriteLine("It can also be used for text compression in advanced mode.");
             List<string> root_table = new List<string>();
             for (int i = 0; i < 256; i++)
             {
                 char temp = (char)i;
                 root_table.Add(temp.ToString());
             }
-            Console.WriteLine("Input 'exit' to stop the application");
+            Console.WriteLine("Input 'exit' to stop the application.");
+            Console.WriteLine("Input 'change' after choosing the mode to change it.");
             bool go = true;
             int version = 0;
             while (go)
             {
-                Console.WriteLine("Input 1 for educational version or 2 for advanced version");
+                Console.WriteLine("Input 1 for educational version or 2 for advanced version.");
                 string temp = Console.ReadLine();
                 if (temp == "exit")
                 {
@@ -144,8 +146,12 @@ namespace LZW
                     string input = Console.ReadLine();
                     if (input == "exit")
                     {
-                        go = false;
                         break;
+                    }
+                    if (input == "change")
+                    {
+                        version = 2;
+                        continue;
                     }
                     string[] res = Compress(input, root_table);
                     string output = res[0];
@@ -160,26 +166,61 @@ namespace LZW
                 }
                 else
                 {
-                    bool usual_version_go = true;
+                    bool usual_version_go = true,fileread = true;
                     int action_num = 0;
+                    Console.WriteLine("Input 'file' to read text from a file");
                     Console.WriteLine("Input text or codes: ");
                     string input = Console.ReadLine();
+                    if(input == "file")
+                    {
+                        while (fileread)
+                        {
+                            Console.WriteLine("Input file name if it's in the app's folder");
+                            Console.WriteLine("Or input file path");
+                            string path = Console.ReadLine();
+                            if (path == "exit")
+                                break;
+                            if (path == "change")
+                            {
+                                input = "change";
+                            }
+                            else
+                            {
+                                if (File.Exists(path))
+                                    input = File.ReadAllText(path);
+                            }
+                        }
+                    }
+                    if (input == "change")
+                    {
+                        version = 1;
+                        Console.WriteLine("Application mode has been changed.");
+                        continue;
+                    }
+                    if (input == "exit")
+                    {
+                        break;
+                    }
                     do
                     {
-                        Console.WriteLine("Input 1 to compress or 2 to decompress");
+                        Console.WriteLine("Input 1 to compress 2 to decompress");
                         string action = Console.ReadLine();
+                        if (action == "change")
+                        {
+                            version = 1;
+                            break;
+                        }
                         bool IsANum = int.TryParse(action, out action_num);
                         if (IsANum && ((action_num == 1) || (action_num == 2)))
                         {
-                            usual_version_go = false;
                             break;
                         }
                     }
                     while (usual_version_go);
-                    if (input == "exit")
+                    if (version == 1)
                     {
-                        go = false;
-                        break;
+                        Console.WriteLine("Application mode has been changed.");
+                        continue;
                     }
                     if (action_num == 1)
                     {
