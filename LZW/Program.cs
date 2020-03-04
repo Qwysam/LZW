@@ -113,7 +113,6 @@ namespace LZW
             //explain what it should do
             Console.WriteLine("This is and educational program to show LZW compression algorithm");
             Console.WriteLine("It can also be used for text compression in advanced mode");
-            int count = 0;
             List<string> root_table = new List<string>();
             for (int i = 0; i < 256; i++)
             {
