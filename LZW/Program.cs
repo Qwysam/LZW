@@ -12,7 +12,7 @@ namespace LZW
         - строка в виде целых неотрицательных чисел,раздеоённых пробелами
         - строка хранящая размер до сжатия
         - строка хранящая размер после сжатия */
-        static string[] Compress(string input, List<string> root_table)
+        static string[] Compress(string input, List<string> root_table,int mode)
         {
             //Объявление целочисленного списка,который будет содержать коды символов
             List<int> compressed = new List<int>();
@@ -60,12 +60,23 @@ namespace LZW
             int size_after = sizeof(int) * compressed.Count;
             //Возвращение массива строк
             string[] res = { output, $"{size_before}", $"{size_after}" };
+            Console.WriteLine("First 10 elements of compression table: ");
+            if (mode == 1)
+            {
+                int lim = 266;
+                if (compress_table.Count < 267)
+                    lim = compress_table.Count;
+                for(int i = 256; i < lim; i++)
+                {
+                    Console.Write($"{i}\t {compress_table[i]} \n");
+                }
+            }
             return res;
         }
         /* Функция для декомпрессии
         Принимает: строку ввода и таблицу ASCII в виде списка строк
         Возвращает: Строку в виде целых неотрицательных чисел,раздеоённых пробелами */
-        static string Decompress(string input, List<string> root_table)
+        static string Decompress(string input, List<string> root_table,int mode)
         {
             //Перевод строки в массив строк с пробелом в роли разделителя
             string[] arr = input.Split(' ');
@@ -105,6 +116,17 @@ namespace LZW
                 decompress_table.Add(output + C);
                 output = temp_s;
 
+            }
+            Console.WriteLine("First 10 elements of decompression table: ");
+            if (mode == 1)
+            {
+                int lim = 266;
+                if (decompress_table.Count < 267)
+                    lim = decompress_table.Count;
+                for (int i = 256; i < lim; i++)
+                {
+                    Console.Write($"{i}\t {decompress_table[i]} \n");
+                }
             }
             return res;
         }
@@ -153,14 +175,14 @@ namespace LZW
                         version = 2;
                         continue;
                     }
-                    string[] res = Compress(input, root_table);
+                    string[] res = Compress(input, root_table,version);
                     string output = res[0];
                     Console.WriteLine("Compression codes: ");
                     Console.WriteLine(output);
                     Console.WriteLine($"Size before the compression : {res[1]} bytes");
                     Console.WriteLine($"Size after the compression : {res[2]} bytes");
                     Console.WriteLine("Decompression.....");
-                    output = Decompress(output, root_table);
+                    output = Decompress(output, root_table,version);
                     Console.WriteLine(output);
 
                 }
@@ -227,7 +249,7 @@ namespace LZW
                     }
                     if (action_num == 1)
                     {
-                        string[] res = Compress(input, root_table);
+                        string[] res = Compress(input, root_table,version);
                         string output = res[0];
                         Console.WriteLine("Compression codes: ");
                         Console.WriteLine(output);
@@ -236,7 +258,7 @@ namespace LZW
                     }
                     if (action_num == 2)
                     {
-                        string output = Decompress(input, root_table);
+                        string output = Decompress(input, root_table,version);
                         Console.WriteLine("Decompressed: ");
                         Console.WriteLine(output);
                     }
